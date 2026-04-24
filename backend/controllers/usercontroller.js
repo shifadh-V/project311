@@ -24,5 +24,21 @@ const createUser=async(req,res)=>{
     }
     
 }
-
+const login=async(req,res)=>{
+    const {email,password}=req.body
+    try{
+        const user=await user.findOne({email})
+        if(!user){
+            return res.status(404).json({msg:"user not registerd"})
+        }
+        const MatchPassword=await bcrypt.compare(password,user.password)
+      if(!MatchPassword){
+        return res.status(404).json({msg:"invalid creditials"})
+        }
+        res.status(200).json({msg:"login successfull"})
+        }catch(error){
+            return res.status(500).json({msg:"server error"})
+        }
+    }   
 module.exports={createUser}
+module.exports={login}
