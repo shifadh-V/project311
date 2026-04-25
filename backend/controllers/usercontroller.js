@@ -39,6 +39,11 @@ const login=async(req,res)=>{
         }catch(error){
             return res.status(500).json({msg:"server error"})
         }
-    }   
+    }  
+    
+    
+const jwt=require('jsonwebtoken')
+
+const token=jwt.sign({user_ b })
 module.exports={createUser}
 module.exports={login}
