@@ -1,5 +1,6 @@
 const User=require('../models/createuser')
 const bcrypt=require('bcrypt')
+const jwt = require('jsonwebtoken')
 const saltround=10
 const createUser=async(req,res)=>{
     const{name,email,password}=req.body
@@ -12,7 +13,7 @@ const createUser=async(req,res)=>{
         const userdata= await new User({
             name,
             email,
-            password:hashedpassword
+            password:hashedPassword
         })
         await userdata.save()
         res.status(200).json({msg:"user created successfully",data:userdata})
@@ -24,10 +25,12 @@ const createUser=async(req,res)=>{
     }
     
 }
+
+//login
 const login=async(req,res)=>{
     const {email,password}=req.body
     try{
-        const user=await user.findOne({email})
+        const user=await User.findOne({email})
         if(!user){
             return res.status(404).json({msg:"user not registerd"})
         }
@@ -35,15 +38,14 @@ const login=async(req,res)=>{
       if(!MatchPassword){
         return res.status(404).json({msg:"invalid creditials"})
         }
-        res.status(200).json({msg:"login successfull"})
+        const token = jwt.sign({id:user._id,name:user.name},process.env.SECRET_KEY,{expiresIn:'1h'})
+        res.status(200).json({msg:"login successfull",token:token})
         }catch(error){
+            console.log(error);
+            
             return res.status(500).json({msg:"server error"})
         }
     }  
     
-    
-const jwt=require('jsonwebtoken')
 
-const token=jwt.sign({user_ b })
-module.exports={createUser}
-module.exports={login}
+module.exports={createUser,login}

@@ -2,16 +2,18 @@ const Blog = require('../models/blogmodel')
 
 
 const createBlog = async (req,res) => {
-    const { title,description,author} = req.body
+    const { title,description} = req.body
     try{
         const newdata = await new Blog({
             title,
             description,
-            author
+            author:req.user.name
         })
         await newdata.save()
         res.status(200).json({ msg:"created successfullly",data:newdata})
     } catch (error){
+        console.log(error);
+        
         res.status(500).json({ msg: "server error"})
     }
     
@@ -34,7 +36,10 @@ const updatePost = async(req,res) =>{
     try{
         const {id}=req.params
         const updatePost=await Blog.findByIdAndUpdate(id,req.body,{new:true})
-
+        app.use(cors({
+                origin:"http://localhost:5173",
+                Credentials:true
+           }))                                                                                                                                                                                             
         if(!updatePost){
             res.status(404).json({msg:"post not found"})
         }
