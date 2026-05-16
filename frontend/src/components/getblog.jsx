@@ -1,41 +1,37 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { blogdta } from "../api/Api";
+import React, { useEffect, useState } from "react";
+import { GData } from "../api/Api";
 
-const blogdta = ()=>{
-    const[data,setdata]= useState([])
+const Data = () => {
+    const [data, setdata] = useState([]);
 
-    useEffect(()=>{
-        const fetchdata= async()=>{
-            const res=await blogdta()
+    useEffect(() => {
+        const fetchdata = async () => {
+            try {
+                const res = await GData();
+                setdata(res.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
 
-            setdata(res.data)
+        fetchdata();
+    }, []);
 
-        }
-        fetchdata()
-    },[])
     return (
-        <>blogdta
+        <>
+            <h1>Blog Data</h1>
 
+            {data.map((i, index) => (
+                <div key={index}>
+                    <h1>{i.title}</h1>
 
-                {
-                    data.map((i,index)=>{
-                        <div key={index}>
-                            <h1>{i.title}</h1>
-                            <p>
-                                {i.description}
-                            </p>
-                            <h3>
-                                {i.author}
-                            </h3>
+                    <p>{i.description}</p>
 
-                        </div>
-                    })
-                }
+                    <h3>{i.author}</h3>
+                </div>
+            ))}
         </>
-    )
+    );
+};
 
-}
-
-export default blogdta
+export default Data;

@@ -1,10 +1,13 @@
-
+import Data from "./components/getblog" 
 
 function App(){
   return(
     <>
     <h1>hello</h1>
-    <blogdta />
+    
+    <Data/>
     </>
   )
 }
+
+export default App
